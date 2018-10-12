@@ -45,3 +45,29 @@ select YEAR(Value_Date) as yr, AVG(Open) as av
 ##                            SQOOP
   
 sqoop import --connect jdbc:mysql://localhost:3306/test --username root  --table Persons  --hive-table Persons --hive-import --split-by id --direct
+
+
+
+### Creating Web Access log Database in Hive and log files are stored in HDFS
+
+CREATE EXTERNAL TABLE t_accesslog ( 
+        `ip`                STRING, 
+        `time_local`        STRING, 
+        `method`            STRING, 
+        `uri`               STRING, 
+        `protocol`          STRING, 
+        `status`            STRING, 
+        `bytes_sent`        STRING, 
+        `referer`           STRING, 
+        `useragent`         STRING 
+        ) 
+    ROW FORMAT SERDE 'org.apache.hadoop.hive.contrib.serde2.RegexSerDe' 
+    WITH SERDEPROPERTIES ( 
+    'input.regex'='^(\\S+) \\S+ \\S+ \\[([^\\[]+)\\] "(\\w+) (\\S+) (\\S+)" (\\d+) (\\d+) "([^"]+)" "([^"]+)".*' 
+) 
+STORED AS TEXTFILE 
+LOCATION '/user/access_log_20151010-081346.log'; 
+
+
+
+#### The Regular Expression Create in preceding hive query was by http://rubular.com/
