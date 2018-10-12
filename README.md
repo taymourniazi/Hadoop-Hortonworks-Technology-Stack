@@ -32,7 +32,7 @@ row format delimited fields terminated by ','
 location '/hbp/chapt2; 
 ### finds the maximum opening stock price for each year in the dataset
 select MAX(Open), YEAR(Value_Date) a 
-  from t_ibm_stocks 
+  from t_ibm_stocks   
   group by YEAR(Value_Date);  
     
   
