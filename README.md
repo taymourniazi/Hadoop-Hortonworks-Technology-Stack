@@ -31,15 +31,15 @@ Adj_Close FLOAT)
 row format delimited fields terminated by ','  
 location '/hbp/chapt2; 
 ### finds the maximum opening stock price for each year in the dataset
-select MAX(Open), YEAR(Value_Date) a 
-  from t_ibm_stocks   
-  group by YEAR(Value_Date);  
+select MAX(Open), YEAR(Value_Date) a  
+  from t_ibm_stocks     
+  group by YEAR(Value_Date);    
     
   
 ###   Finds the average stock prices for each year in the dataset  
-select YEAR(Value_Date) as yr, AVG(Open) as av 
-  from t_ibm_stocks 
-  group by YEAR(Value_Date); 
+select YEAR(Value_Date) as yr, AVG(Open) as av   
+  from t_ibm_stocks   
+  group by YEAR(Value_Date);  
 
   
 ##                            SQOOP
