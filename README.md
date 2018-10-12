@@ -33,7 +33,7 @@ location '/hbp/chapt2;
 ### finds the maximum opening stock price for each year in the dataset
 select MAX(Open), YEAR(Value_Date) a 
   from t_ibm_stocks 
-  group by YEAR(Value_Date);
+  group by YEAR(Value_Date);  
     
   
 ###   Finds the average stock prices for each year in the dataset  
