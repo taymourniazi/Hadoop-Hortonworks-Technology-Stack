@@ -66,7 +66,7 @@ CREATE EXTERNAL TABLE t_accesslog (
     'input.regex'='^(\\S+) \\S+ \\S+ \\[([^\\[]+)\\] "(\\w+) (\\S+) (\\S+)" (\\d+) (\\d+) "([^"]+)" "([^"]+)".*'   
 )   
 STORED AS TEXTFILE  
-LOCATION '/user/access_log_20151010-081346.log';   
+LOCATION '/user/access_log_20151010-081346.log';     
 
 
 
