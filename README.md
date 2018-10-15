@@ -64,13 +64,56 @@ CREATE EXTERNAL TABLE t_accesslog (
     ROW FORMAT SERDE 'org.apache.hadoop.hive.contrib.serde2.RegexSerDe'   
     WITH SERDEPROPERTIES (   
     'input.regex'='^(\\S+) \\S+ \\S+ \\[([^\\[]+)\\] "(\\w+) (\\S+) (\\S+)" (\\d+) (\\d+) "([^"]+)" "([^"]+)".*'   
+)    
+STORED AS TEXTFILE    
+LOCATION '/user/access_log_20151010-081346.log';      
+  
+
+  
+#### The Regular Expression Create in preceding hive query was by http://rubular.com/    
+  
+### LOADING TWEETS INTO HADOOP  
+  
+hadoop fs -copyFromLocal tweets01.json /user/tweets/  
+  
+##### In Hive  
+CREATE EXTERNAL TABLE t_tweets (   
+  id BIGINT,   
+  created_at STRING,    
+  source STRING,   
+  favorited BOOLEAN,    
+  retweet_count INT,    
+  retweeted_status STRUCT<   
+     text:STRING,     
+     user:STRUCT<screen_name:STRING,name:STRING>>,   
+  entities STRUCT<   
+     urls:ARRAY<STRUCT<expanded_url:STRING>>,   
+     user_mentions:ARRAY<STRUCT<screen_name:STRING,name:STRING>>,   
+     hashtags:ARRAY<STRUCT<text:STRING>>>,   
+  text STRING,   
+  user STRUCT<    
+     screen_name:STRING,   
+     name:STRING,   
+     friends_count:INT,   
+     followers_count:INT,   
+     statuses_count:INT,   
+     verified:BOOLEAN,   
+     utc_offset:STRING,    
+     time_zone:STRING>,   
+  in_reply_to_screen_name STRING,   
+  year int,   
+  month int,     
+  day int,   
+  hour int   
 )   
-STORED AS TEXTFILE  
-LOCATION '/user/access_log_20151010-081346.log';     
-
-
-
-#### The Regular Expression Create in preceding hive query was by http://rubular.com/  
-
-
+ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'   
+STORED AS TEXTFILE   
+LOCATION '/user/tweets';   
+  
+hive> ADD JAR json-serde-1.3.6-jar-with-dependencies.jar;   
+hive> set hive.support.sql11.reserved.keywords=false;  
+  
+select count(*) b, ip, regexp_extract(uri, '[a-zA-Z]+',0)   
+from t_accesslog a   
+where uri not like '%prod%' group by ip, uri order by ip, b desc limit 5;  
   
