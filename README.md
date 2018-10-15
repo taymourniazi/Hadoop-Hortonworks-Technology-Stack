@@ -73,4 +73,4 @@ LOCATION '/user/access_log_20151010-081346.log';
 #### The Regular Expression Create in preceding hive query was by http://rubular.com/  
 
 
-yayuver@polyswarms.com  
+  
